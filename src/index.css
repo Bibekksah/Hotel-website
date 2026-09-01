@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #FFF8EF;
+  --color-gold: #D4AF37;
+  --color-gold-light: #E9D595;
+  --color-chocolate: #4A2F1A;
+  --color-coffee: #2C1810;
+  --color-charcoal: #161616;
+  --color-beige: #F7E9D0;
+  
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Outfit", sans-serif;
+  
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float-slow 9s ease-in-out infinite;
+  --animate-gold-glow: gold-glow 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(3deg);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(-4deg);
+  }
+}
+
+@keyframes gold-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(212, 175, 85, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(212, 175, 85, 0.45);
+  }
+}
+
+/* Custom global styles */
+body {
+  background-color: #FFF8EF;
+  color: #2C1810;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #2C1810;
+}
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E9D595;
+}
+
+/* Glassmorphism utility classes */
+.glass-panel {
+  background: rgba(255, 248, 239, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.glass-panel-dark {
+  background: rgba(22, 22, 22, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+/* Luxury gold text clip */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #FFEAB5 0%, #D4AF37 50%, #8A6F27 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Grid masonry styles */
+.masonry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-gap: 1.5rem;
+  grid-auto-flow: dense;
+}
+
+/* Custom background mesh patterns */
+.luxury-bg-pattern {
+  background-image: 
+    radial-gradient(circle at 100% 150%, #4A2F1A 24%, #2C1810 25%, #2C1810 28%, #4A2F1A 29%, #4A2F1A 36%, #2C1810 36%, #2C1810 40%, transparent 40%, transparent),
+    radial-gradient(circle at 0% 150%, #4A2F1A 24%, #2C1810 25%, #2C1810 28%, #4A2F1A 29%, #4A2F1A 36%, #2C1810 36%, #2C1810 40%, transparent 40%, transparent),
+    radial-gradient(circle at 50% 100%, #2C1810 10%, #4A2F1A 11%, #4A2F1A 23%, #2C1810 24%, #2C1810 30%, #4A2F1A 31%, #4A2F1A 43%, #2C1810 44%, #2C1810 50%, transparent 50%, transparent);
+  background-size: 100px 50px;
+}
