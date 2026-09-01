@@ -1,18 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaTimes, FaDownload, FaWifi, FaMobileAlt, FaCheck, FaCopy } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { generateQRCodeMatrix } from '../utils/qrGenerator';
+import QRCode from 'qrcode';
 
 export default function QRCodeModal({ isOpen, onClose }) {
   const [currentUrl, setCurrentUrl] = useState('');
+  const [qrDataUrl, setQrDataUrl] = useState('');
   const [copied, setCopied] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const svgRef = useRef(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const menuUrl = new URL('/menu', window.location.origin).toString();
       setCurrentUrl(menuUrl);
+
+      // Generate standard, camera-scannable QR code
+      QRCode.toDataURL(menuUrl, {
+        width: 600,
+        margin: 2,
+        color: {
+          dark: '#161616',
+          light: '#FFFFFF'
+        },
+        errorCorrectionLevel: 'M'
+      })
+        .then((url) => {
+          setQrDataUrl(url);
+        })
+        .catch((err) => {
+          console.error('QR code generation error:', err);
+        });
     }
 
     const handleOnline = () => setIsOnline(true);
@@ -25,12 +42,9 @@ export default function QRCodeModal({ isOpen, onClose }) {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, []);
+  }, [isOpen]);
 
   if (!isOpen) return null;
-
-  const qrMatrix = generateQRCodeMatrix(currentUrl || 'https://roshani-chaat-house.local');
-  const matrixSize = qrMatrix.length;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(currentUrl);
@@ -39,30 +53,11 @@ export default function QRCodeModal({ isOpen, onClose }) {
   };
 
   const handleDownloadQR = () => {
-    const svgElement = svgRef.current;
-    if (!svgElement) return;
-
-    const svgData = new XMLSerializer().serializeToString(svgElement);
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-
-    img.onload = () => {
-      canvas.width = 600;
-      canvas.height = 600;
-      // White background for print readiness
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 50, 50, 500, 500);
-
-      const pngFile = canvas.toDataURL('image/png');
-      const downloadLink = document.createElement('a');
-      downloadLink.download = 'Roshani_Chaat_House_Menu_QR.png';
-      downloadLink.href = pngFile;
-      downloadLink.click();
-    };
-
-    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+    if (!qrDataUrl) return;
+    const downloadLink = document.createElement('a');
+    downloadLink.download = 'Roshani_Chaat_House_Menu_QR.png';
+    downloadLink.href = qrDataUrl;
+    downloadLink.click();
   };
 
   return (
@@ -102,43 +97,25 @@ export default function QRCodeModal({ isOpen, onClose }) {
               Scan for Offline Menu Access
             </h3>
             <p className="text-xs text-chocolate/75 font-sans leading-relaxed">
-              Scan this QR code to open the full Roshani menu on your phone, even when you are offline.
+              Scan this QR code with any phone camera to open and browse the full menu instantly.
             </p>
           </div>
 
           {/* QR Code Container Plate */}
           <div className="bg-gradient-to-b from-[#2C1810] to-[#161616] border-2 border-gold/30 rounded-2xl p-6 flex flex-col items-center justify-center relative shadow-inner mb-6">
-            {/* SVG Rendered QR Code */}
-            <div className="bg-white p-3 rounded-xl shadow-2xl relative border-2 border-gold/40">
-              <svg
-                ref={svgRef}
-                viewBox={`0 0 ${matrixSize} ${matrixSize}`}
-                className="w-52 h-52"
-                shapeRendering="crispEdges"
-              >
-                <rect width={matrixSize} height={matrixSize} fill="#FFFFFF" />
-                {qrMatrix.map((row, r) =>
-                  row.map((cell, c) => (
-                    cell ? (
-                      <rect
-                        key={`${r}-${c}`}
-                        x={c}
-                        y={r}
-                        width="1"
-                        height="1"
-                        fill="#161616"
-                      />
-                    ) : null
-                  ))
-                )}
-              </svg>
-
-              {/* Central Logo Stamp */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-10 h-10 rounded-full bg-gold border-2 border-charcoal flex items-center justify-center shadow-lg">
-                  <span className="font-serif text-charcoal font-bold text-lg">R</span>
+            {/* Real Camera-Scannable QR Code */}
+            <div className="bg-white p-3 rounded-xl shadow-2xl relative border-2 border-gold/40 flex items-center justify-center">
+              {qrDataUrl ? (
+                <img
+                  src={qrDataUrl}
+                  alt="Roshani Chaat House Menu QR Code"
+                  className="w-52 h-52 object-contain"
+                />
+              ) : (
+                <div className="w-52 h-52 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full border-2 border-gold border-t-transparent animate-spin" />
                 </div>
-              </div>
+              )}
             </div>
 
             <span className="font-sans text-[10px] tracking-widest uppercase text-gold/80 font-bold mt-4">
@@ -153,7 +130,7 @@ export default function QRCodeModal({ isOpen, onClose }) {
               <span>How to Use Without Internet:</span>
             </h4>
             <ol className="text-[11px] text-chocolate/80 space-y-1.5 font-sans list-decimal list-inside pl-1">
-              <li><strong>Scan</strong> the QR code above using your mobile camera.</li>
+              <li><strong>Scan</strong> the QR code above using your mobile camera or Google Lens.</li>
               <li>Tap <strong>"Add to Home Screen"</strong> or <strong>"Install App"</strong> in your browser menu.</li>
               <li>Open the app anytime – <strong>works 100% offline</strong> without Wi-Fi or mobile data!</li>
             </ol>

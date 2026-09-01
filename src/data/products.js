@@ -1093,58 +1093,6 @@ export const initialProducts = initialProductsData.map((product) => ({
   image: imageMap[product.id] || product.image || ""
 }));
 
-export const initialReviews = {
-  "sweet-lal-mohan": [
-    {
-      id: "r1",
-      userName: "Ramesh Sharma",
-      rating: 5,
-      comment: "Absolutely melts in the mouth! The cardamom aroma is heavenly. The quality is much better than other sweet shops around.",
-      date: "2026-06-25",
-      likes: 12,
-      isVerified: true
-    },
-    {
-      id: "r2",
-      userName: "Pooja Shrestha",
-      rating: 4,
-      comment: "Very fresh and soft. Perfectly sweet, not overwhelming. Will order again for the upcoming festival.",
-      date: "2026-06-20",
-      likes: 5,
-      isVerified: true
-    }
-  ],
-  "khuwa-kaju-barfi": [
-    {
-      id: "r3",
-      userName: "Sanjay Gupta",
-      rating: 5,
-      comment: "Excellent Kaju Katli! Authentic taste and perfect texture. The silver foil was applied very cleanly. Best in Kathmandu.",
-      date: "2026-06-28",
-      likes: 18,
-      isVerified: true
-    }
-  ],
-  "snack-momo": [
-    {
-      id: "r4",
-      userName: "Anisha Giri",
-      rating: 5,
-      comment: "The sesame tomato chutney is spectacular! Dumplings are juicy, wrapping is thin, stuffing is very flavorful.",
-      date: "2026-06-27",
-      likes: 24,
-      isVerified: true
-    }
-  ],
-  "milk-rasmalai": [
-    {
-      id: "r5",
-      userName: "Kabir Dev",
-      rating: 5,
-      comment: "Outstanding! Chilled perfectly, very soft paneer disc and the milk reduction is beautifully flavored with saffron.",
-      date: "2026-06-29",
-      likes: 31,
-      isVerified: true
-    }
-  ]
-};
+// All reviews are submitted live by genuine customers and managed dynamically
+export const initialReviews = {};
+
