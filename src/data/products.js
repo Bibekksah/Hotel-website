@@ -1009,7 +1009,13 @@ const initialProductsData = [
   }
 ];
 
-const imageAsset = (path) => new URL(path, import.meta.url).href;
+const photoModules = import.meta.glob('../photos/**/*.{jpg,jpeg,png,webp,svg,JPG,JPEG,PNG,WEBP,SVG}', {
+  eager: true,
+  import: 'default',
+});
+
+const imageAsset = (path) => photoModules[path] || '';
+
 
 const imageMap = {
   // ==================== SWEETS ====================
